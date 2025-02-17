@@ -1,0 +1,1892 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="12/11/2023 3:15:19 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="LOKESWAR"
+  DTS:CreatorName="Lokeswar\Lokeswar"
+  DTS:DTSID="{7E1475CB-CE28-4BD1-8D4E-DDFA609EF0D1}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="16.0.5314.0"
+  DTS:LocaleID="16393"
+  DTS:ObjectName="HealthCare"
+  DTS:PackageType="5"
+  DTS:VersionBuild="70"
+  DTS:VersionGUID="{06E7EA49-16B1-4BA1-8035-536819401DDD}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[Lokeswar\DEV.Healthcare_Final_Project]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{F393808F-8A52-4C4F-84E4-ECC8BFC3E418}"
+      DTS:ObjectName="Lokeswar\DEV.Healthcare_Final_Project">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=Lokeswar\DEV;Initial Catalog=Healthcare_Group_Project;Provider=MSOLEDBSQL.1;Integrated Security=SSPI;Auto Translate=False;Application Name=SSIS-HealthCare-{F393808F-8A52-4C4F-84E4-ECC8BFC3E418}Lokeswar\DEV.Healthcare_Final_Project;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Loading Data into Admission Table"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{5cac56bf-4086-461b-86d2-f676fea4df14}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Loading Data into Admission Table"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{F393808F-8A52-4C4F-84E4-ECC8BFC3E418}"
+          SQLTask:SqlStatementSource="INSERT INTO admission (DateofAdmission, RoomNumber, [AdmissionType], DischargeDate, BillingAmount)&#xA;SELECT DISTINCT [Date of Admission], [Room Number], [Admission Type], [Discharge Date], [Billing Amount]&#xA;FROM HealthCare_Dataset;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Loading Data into Doctor Table"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{c322e41a-c011-4c6a-98c9-3ba893c7fefd}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Loading Data into Doctor Table"
+      DTS:ThreadHint="1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{F393808F-8A52-4C4F-84E4-ECC8BFC3E418}"
+          SQLTask:SqlStatementSource="Insert into Doctor(Name)&#xA;select DISTINCT Doctor&#xA;from HealthCare_Dataset" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Loading Data into Hospital Table"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{fa4ac177-07e3-443d-851a-c0776ca0b725}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Loading Data into Hospital Table"
+      DTS:ThreadHint="2">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{F393808F-8A52-4C4F-84E4-ECC8BFC3E418}"
+          SQLTask:SqlStatementSource="Insert into Hospital (Name)&#xA;select DISTINCT Hospital&#xA;from HealthCare_Dataset" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Loading Data into InsuranceProvider Table"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{3d26c3a8-4869-46ec-ac4d-46eed7ebe31c}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Loading Data into InsuranceProvider Table"
+      DTS:ThreadHint="3">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{F393808F-8A52-4C4F-84E4-ECC8BFC3E418}"
+          SQLTask:SqlStatementSource="Insert into InsuranceProvider(Name)&#xA;select DISTINCT [Insurance Provider]&#xA;from HealthCare_Dataset" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Loading Data into Medication Table"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{8e0a0915-121c-432f-ac56-dc42fd0b7656}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Loading Data into Medication Table"
+      DTS:ThreadHint="4">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{F393808F-8A52-4C4F-84E4-ECC8BFC3E418}"
+          SQLTask:SqlStatementSource="Insert into Medication(Name)&#xA;select DISTINCT Medication&#xA;from HealthCare_Dataset" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Loading Data into Patient Table"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{1CB4C73D-9595-4D87-AA14-4235E7B25B5B}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Loading Data into Patient Table"
+      DTS:ThreadHint="5">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{F393808F-8A52-4C4F-84E4-ECC8BFC3E418}"
+          SQLTask:SqlStatementSource="INSERT INTO Patient (Name, Age, Gender, BloodType)&#xA;SELECT DISTINCT [Name], [Age], [Gender], [Blood Type]&#xA;FROM HealthCare_Dataset;&#xA;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Loading Data into Test Table"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{0156AC0F-E85E-4BD0-AF68-FB60FA193BC6}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Loading Data into Test Table"
+      DTS:ThreadHint="6">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{F393808F-8A52-4C4F-84E4-ECC8BFC3E418}"
+          SQLTask:SqlStatementSource="INSERT INTO Test (Name)&#xA;SELECT DISTINCT [Test Results]&#xA;FROM HealthCare_Dataset;&#xA;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Loading Whole Dataset into Base Table"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{49259E43-3466-4758-A51C-DD50F4859353}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Loading Whole Dataset into Base Table"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Loading Whole Dataset into Base Table\Flat File Source"
+              componentClassID="Microsoft.FlatFileSource"
+              contactInfo="Flat File Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;1"
+              description="Flat File Source"
+              localeId="16393"
+              name="Flat File Source"
+              usesDispositions="true"
+              version="1">
+              <properties>
+                <property
+                  dataType="System.Boolean"
+                  description="Specifies whether zero-length columns are treated as null."
+                  name="RetainNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of an output column containing the file name. If no name is specified, no output column containing the file name will be generated."
+                  name="FileNameColumnName"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Loading Whole Dataset into Base Table\Flat File Source.Connections[FlatFileConnection]"
+                  connectionManagerID="{884DEE4E-98CA-4267-8A18-D29DCC445767}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[Healthcare_Data]"
+                  name="FlatFileConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output]"
+                  name="Flat File Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Name]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[Name]"
+                      length="25"
+                      lineageId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Name]"
+                      name="Name"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the data is in binary format."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Age]"
+                      dataType="i1"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[Age]"
+                      lineageId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Age]"
+                      name="Age"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the data is in binary format."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Gender]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[Gender]"
+                      length="6"
+                      lineageId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Gender]"
+                      name="Gender"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the data is in binary format."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Blood Type]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[Blood Type]"
+                      length="3"
+                      lineageId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Blood Type]"
+                      name="Blood Type"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the data is in binary format."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Medical Condition]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[Medical Condition]"
+                      length="12"
+                      lineageId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Medical Condition]"
+                      name="Medical Condition"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the data is in binary format."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Date of Admission]"
+                      dataType="date"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[Date of Admission]"
+                      lineageId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Date of Admission]"
+                      name="Date of Admission"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the data is in binary format."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Doctor]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[Doctor]"
+                      length="26"
+                      lineageId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Doctor]"
+                      name="Doctor"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the data is in binary format."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Hospital]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[Hospital]"
+                      length="30"
+                      lineageId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Hospital]"
+                      name="Hospital"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the data is in binary format."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Insurance Provider]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[Insurance Provider]"
+                      length="16"
+                      lineageId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Insurance Provider]"
+                      name="Insurance Provider"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the data is in binary format."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Billing Amount]"
+                      dataType="r4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[Billing Amount]"
+                      lineageId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Billing Amount]"
+                      name="Billing Amount"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the data is in binary format."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Room Number]"
+                      dataType="i2"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[Room Number]"
+                      lineageId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Room Number]"
+                      name="Room Number"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the data is in binary format."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Admission Type]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[Admission Type]"
+                      length="9"
+                      lineageId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Admission Type]"
+                      name="Admission Type"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the data is in binary format."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Discharge Date]"
+                      dataType="date"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[Discharge Date]"
+                      lineageId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Discharge Date]"
+                      name="Discharge Date"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the data is in binary format."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Medication]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[Medication]"
+                      length="11"
+                      lineageId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Medication]"
+                      name="Medication"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the data is in binary format."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Test Results]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[Test Results]"
+                      length="12"
+                      lineageId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Test Results]"
+                      name="Test Results"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the data is in binary format."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[Name]"
+                      codePage="1252"
+                      dataType="str"
+                      length="25"
+                      name="Name" />
+                    <externalMetadataColumn
+                      refId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[Age]"
+                      dataType="i1"
+                      name="Age" />
+                    <externalMetadataColumn
+                      refId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[Gender]"
+                      codePage="1252"
+                      dataType="str"
+                      length="6"
+                      name="Gender" />
+                    <externalMetadataColumn
+                      refId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[Blood Type]"
+                      codePage="1252"
+                      dataType="str"
+                      length="3"
+                      name="Blood Type" />
+                    <externalMetadataColumn
+                      refId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[Medical Condition]"
+                      codePage="1252"
+                      dataType="str"
+                      length="12"
+                      name="Medical Condition" />
+                    <externalMetadataColumn
+                      refId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[Date of Admission]"
+                      dataType="date"
+                      name="Date of Admission" />
+                    <externalMetadataColumn
+                      refId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[Doctor]"
+                      codePage="1252"
+                      dataType="str"
+                      length="26"
+                      name="Doctor" />
+                    <externalMetadataColumn
+                      refId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[Hospital]"
+                      codePage="1252"
+                      dataType="str"
+                      length="30"
+                      name="Hospital" />
+                    <externalMetadataColumn
+                      refId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[Insurance Provider]"
+                      codePage="1252"
+                      dataType="str"
+                      length="16"
+                      name="Insurance Provider" />
+                    <externalMetadataColumn
+                      refId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[Billing Amount]"
+                      dataType="r4"
+                      name="Billing Amount" />
+                    <externalMetadataColumn
+                      refId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[Room Number]"
+                      dataType="i2"
+                      name="Room Number" />
+                    <externalMetadataColumn
+                      refId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[Admission Type]"
+                      codePage="1252"
+                      dataType="str"
+                      length="9"
+                      name="Admission Type" />
+                    <externalMetadataColumn
+                      refId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[Discharge Date]"
+                      dataType="date"
+                      name="Discharge Date" />
+                    <externalMetadataColumn
+                      refId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[Medication]"
+                      codePage="1252"
+                      dataType="str"
+                      length="11"
+                      name="Medication" />
+                    <externalMetadataColumn
+                      refId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[Test Results]"
+                      codePage="1252"
+                      dataType="str"
+                      length="12"
+                      name="Test Results" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Error Output]"
+                  isErrorOut="true"
+                  name="Flat File Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Error Output].Columns[Flat File Source Error Output Column]"
+                      codePage="1252"
+                      dataType="text"
+                      description="Flat File Source Error Output Column"
+                      lineageId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Error Output].Columns[Flat File Source Error Output Column]"
+                      name="Flat File Source Error Output Column" />
+                    <outputColumn
+                      refId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="OLE DB Destination"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[HealthCare_Dataset]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[Lokeswar\DEV.Healthcare_Final_Project]"
+                  connectionManagerRefId="Package.ConnectionManagers[Lokeswar\DEV.Healthcare_Final_Project]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Name]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="25"
+                      cachedName="Name"
+                      externalMetadataColumnId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Name]"
+                      lineageId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Name]" />
+                    <inputColumn
+                      refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Age]"
+                      cachedDataType="i1"
+                      cachedName="Age"
+                      externalMetadataColumnId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Age]"
+                      lineageId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Age]" />
+                    <inputColumn
+                      refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Gender]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="6"
+                      cachedName="Gender"
+                      externalMetadataColumnId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Gender]"
+                      lineageId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Gender]" />
+                    <inputColumn
+                      refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Blood Type]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="3"
+                      cachedName="Blood Type"
+                      externalMetadataColumnId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Blood Type]"
+                      lineageId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Blood Type]" />
+                    <inputColumn
+                      refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Medical Condition]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="12"
+                      cachedName="Medical Condition"
+                      externalMetadataColumnId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Medical Condition]"
+                      lineageId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Medical Condition]" />
+                    <inputColumn
+                      refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Date of Admission]"
+                      cachedDataType="date"
+                      cachedName="Date of Admission"
+                      externalMetadataColumnId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Date of Admission]"
+                      lineageId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Date of Admission]" />
+                    <inputColumn
+                      refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Doctor]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="26"
+                      cachedName="Doctor"
+                      externalMetadataColumnId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Doctor]"
+                      lineageId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Doctor]" />
+                    <inputColumn
+                      refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Hospital]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="30"
+                      cachedName="Hospital"
+                      externalMetadataColumnId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Hospital]"
+                      lineageId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Hospital]" />
+                    <inputColumn
+                      refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Insurance Provider]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="16"
+                      cachedName="Insurance Provider"
+                      externalMetadataColumnId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Insurance Provider]"
+                      lineageId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Insurance Provider]" />
+                    <inputColumn
+                      refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Billing Amount]"
+                      cachedDataType="r4"
+                      cachedName="Billing Amount"
+                      externalMetadataColumnId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Billing Amount]"
+                      lineageId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Billing Amount]" />
+                    <inputColumn
+                      refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Room Number]"
+                      cachedDataType="i2"
+                      cachedName="Room Number"
+                      externalMetadataColumnId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Room Number]"
+                      lineageId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Room Number]" />
+                    <inputColumn
+                      refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Admission Type]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="9"
+                      cachedName="Admission Type"
+                      externalMetadataColumnId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Admission Type]"
+                      lineageId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Admission Type]" />
+                    <inputColumn
+                      refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Discharge Date]"
+                      cachedDataType="date"
+                      cachedName="Discharge Date"
+                      externalMetadataColumnId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Discharge Date]"
+                      lineageId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Discharge Date]" />
+                    <inputColumn
+                      refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Medication]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="11"
+                      cachedName="Medication"
+                      externalMetadataColumnId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Medication]"
+                      lineageId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Medication]" />
+                    <inputColumn
+                      refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Test Results]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="12"
+                      cachedName="Test Results"
+                      externalMetadataColumnId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Test Results]"
+                      lineageId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output].Columns[Test Results]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Name]"
+                      codePage="1252"
+                      dataType="str"
+                      length="25"
+                      name="Name" />
+                    <externalMetadataColumn
+                      refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Age]"
+                      dataType="i2"
+                      name="Age" />
+                    <externalMetadataColumn
+                      refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Gender]"
+                      codePage="1252"
+                      dataType="str"
+                      length="6"
+                      name="Gender" />
+                    <externalMetadataColumn
+                      refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Blood Type]"
+                      codePage="1252"
+                      dataType="str"
+                      length="3"
+                      name="Blood Type" />
+                    <externalMetadataColumn
+                      refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Medical Condition]"
+                      codePage="1252"
+                      dataType="str"
+                      length="12"
+                      name="Medical Condition" />
+                    <externalMetadataColumn
+                      refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Date of Admission]"
+                      dataType="dbTimeStamp"
+                      name="Date of Admission" />
+                    <externalMetadataColumn
+                      refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Doctor]"
+                      codePage="1252"
+                      dataType="str"
+                      length="26"
+                      name="Doctor" />
+                    <externalMetadataColumn
+                      refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Hospital]"
+                      codePage="1252"
+                      dataType="str"
+                      length="30"
+                      name="Hospital" />
+                    <externalMetadataColumn
+                      refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Insurance Provider]"
+                      codePage="1252"
+                      dataType="str"
+                      length="16"
+                      name="Insurance Provider" />
+                    <externalMetadataColumn
+                      refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Billing Amount]"
+                      dataType="r4"
+                      name="Billing Amount" />
+                    <externalMetadataColumn
+                      refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Room Number]"
+                      dataType="i2"
+                      name="Room Number" />
+                    <externalMetadataColumn
+                      refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Admission Type]"
+                      codePage="1252"
+                      dataType="str"
+                      length="9"
+                      name="Admission Type" />
+                    <externalMetadataColumn
+                      refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Discharge Date]"
+                      dataType="dbTimeStamp"
+                      name="Discharge Date" />
+                    <externalMetadataColumn
+                      refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Medication]"
+                      codePage="1252"
+                      dataType="str"
+                      length="11"
+                      name="Medication" />
+                    <externalMetadataColumn
+                      refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Test Results]"
+                      codePage="1252"
+                      dataType="str"
+                      length="12"
+                      name="Test Results" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Loading Whole Dataset into Base Table.Paths[Flat File Source Output]"
+              endId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Inputs[OLE DB Destination Input]"
+              name="Flat File Source Output"
+              startId="Package\Loading Whole Dataset into Base Table\Flat File Source.Outputs[Flat File Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Truncate Admission Table"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{c66152a3-48c3-49c7-9977-c72540e0e133}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Truncate Admission Table"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{F393808F-8A52-4C4F-84E4-ECC8BFC3E418}"
+          SQLTask:SqlStatementSource="Truncate table Admission" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Truncate Doctor Table"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{34956e95-335d-481d-892e-887690ed6379}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Truncate Doctor Table"
+      DTS:ThreadHint="1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{F393808F-8A52-4C4F-84E4-ECC8BFC3E418}"
+          SQLTask:SqlStatementSource="truncate table Doctor" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Truncate Hospital Table"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{ff229f55-1f63-41e5-8f1a-c284eaf326e2}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Truncate Hospital Table"
+      DTS:ThreadHint="2">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{F393808F-8A52-4C4F-84E4-ECC8BFC3E418}"
+          SQLTask:SqlStatementSource="Truncate table hospital" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Truncate insuranceProvider Table"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{f6edfae4-446a-404e-a991-768c811468b4}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Truncate insuranceProvider Table"
+      DTS:ThreadHint="3">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{F393808F-8A52-4C4F-84E4-ECC8BFC3E418}"
+          SQLTask:SqlStatementSource="Truncate table InsuranceProvider" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Truncate Medication Table 1"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{b120cfe9-0d90-44b3-ab4e-8cea04b9ab0d}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Truncate Medication Table 1"
+      DTS:ThreadHint="4">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{F393808F-8A52-4C4F-84E4-ECC8BFC3E418}"
+          SQLTask:SqlStatementSource="Truncate table Medication" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Truncate Patient Table"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{94FA5A19-B109-40D6-8CA9-FD6A24B74734}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Truncate Patient Table"
+      DTS:ThreadHint="5">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{F393808F-8A52-4C4F-84E4-ECC8BFC3E418}"
+          SQLTask:SqlStatementSource="truncate table patient" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Truncate Test Table"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{9A810E47-77B7-4299-AAED-F35447EBEAF6}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Truncate Test Table"
+      DTS:ThreadHint="6">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{F393808F-8A52-4C4F-84E4-ECC8BFC3E418}"
+          SQLTask:SqlStatementSource="Truncate table test" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Truncate the Base Table"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{7E9E02D4-C4EE-4B3F-9BF9-16C55D45055B}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Truncate the Base Table"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{F393808F-8A52-4C4F-84E4-ECC8BFC3E418}"
+          SQLTask:SqlStatementSource="TRUNCATE TABLE HealthCare_Dataset" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{F1EC3859-B431-4170-876A-11226F48CA5B}"
+      DTS:From="Package\Loading Whole Dataset into Base Table"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\Truncate Test Table" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
+      DTS:CreationName=""
+      DTS:DTSID="{C7009CA9-0006-449C-9E25-776CCE496B18}"
+      DTS:From="Package\Truncate the Base Table"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 1"
+      DTS:To="Package\Loading Whole Dataset into Base Table" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 2]"
+      DTS:CreationName=""
+      DTS:DTSID="{D5ACF267-8D6C-4769-9A74-78971BDBEE78}"
+      DTS:From="Package\Loading Whole Dataset into Base Table"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 2"
+      DTS:To="Package\Truncate Patient Table" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 3]"
+      DTS:CreationName=""
+      DTS:DTSID="{ACEB65F4-6401-48DD-B347-65B028CFC6EC}"
+      DTS:From="Package\Truncate Patient Table"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 3"
+      DTS:To="Package\Loading Data into Patient Table" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 3 1]"
+      DTS:CreationName=""
+      DTS:DTSID="{c5314ee4-f27a-4f8b-b68f-b66df5a703cb}"
+      DTS:From="Package\Truncate Doctor Table"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 3 1"
+      DTS:To="Package\Loading Data into Doctor Table" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 4]"
+      DTS:CreationName=""
+      DTS:DTSID="{2B4E8741-ECA1-4313-BFE2-F1909968FA9D}"
+      DTS:From="Package\Truncate Test Table"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 4"
+      DTS:To="Package\Loading Data into Test Table" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 4 1]"
+      DTS:CreationName=""
+      DTS:DTSID="{dcb2b376-fa46-4b54-b9db-f83d5180255d}"
+      DTS:From="Package\Truncate Hospital Table"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 4 1"
+      DTS:To="Package\Loading Data into Hospital Table" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 4 1 1]"
+      DTS:CreationName=""
+      DTS:DTSID="{d2b6ea98-88a0-4a17-ad5f-929069f15f67}"
+      DTS:From="Package\Truncate insuranceProvider Table"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 4 1 1"
+      DTS:To="Package\Loading Data into InsuranceProvider Table" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 4 1 1 1]"
+      DTS:CreationName=""
+      DTS:DTSID="{3f75ddf4-4e73-485b-9606-884d868b3cd8}"
+      DTS:From="Package\Truncate Medication Table 1"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 4 1 1 1"
+      DTS:To="Package\Loading Data into Medication Table" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 4 1 1 1 1]"
+      DTS:CreationName=""
+      DTS:DTSID="{33c83258-4be3-4aa1-ab67-e930fd8d099f}"
+      DTS:From="Package\Truncate Admission Table"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 4 1 1 1 1"
+      DTS:To="Package\Loading Data into Admission Table" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 5]"
+      DTS:CreationName=""
+      DTS:DTSID="{6611C5D2-8255-4A92-B6C2-338D35D638D9}"
+      DTS:From="Package\Loading Whole Dataset into Base Table"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 5"
+      DTS:To="Package\Truncate Hospital Table" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 6]"
+      DTS:CreationName=""
+      DTS:DTSID="{1889A4AF-EA70-417D-8FDA-0C0829795CCB}"
+      DTS:From="Package\Loading Whole Dataset into Base Table"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 6"
+      DTS:To="Package\Truncate Doctor Table" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 7]"
+      DTS:CreationName=""
+      DTS:DTSID="{D41F1AA9-7480-4337-A920-2694B33D625A}"
+      DTS:From="Package\Loading Whole Dataset into Base Table"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 7"
+      DTS:To="Package\Truncate insuranceProvider Table" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 8]"
+      DTS:CreationName=""
+      DTS:DTSID="{F900A923-B1B8-431A-B679-D91F3B99465B}"
+      DTS:From="Package\Loading Whole Dataset into Base Table"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 8"
+      DTS:To="Package\Truncate Medication Table 1" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 9]"
+      DTS:CreationName=""
+      DTS:DTSID="{F1C1E1F1-62A5-4601-B20D-04D2427F6DB9}"
+      DTS:From="Package\Loading Whole Dataset into Base Table"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 9"
+      DTS:To="Package\Truncate Admission Table" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="64" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph" xmlns:s="clr-namespace:System;assembly=mscorlib">
+        <NodeLayout
+          Size="261.6,41.6"
+          Id="Package\Loading Whole Dataset into Base Table"
+          TopLeft="212.685173564579,237.442590941447" />
+        <NodeLayout
+          Size="192,41.6"
+          Id="Package\Truncate the Base Table"
+          TopLeft="234.560172369382,127.351850966263" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="301.218506897913,279.042590941447">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-135.518509083416,64.3092579305409"
+              Start="0,0"
+              End="-135.518509083416,56.8092579305409">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,21.9582658151241" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,21.9582658151241"
+                    Point2="0,25.9582658151241"
+                    Point3="-4,25.9582658151241" />
+                  <mssgle:LineSegment
+                    End="-131.518509083416,25.9582658151241" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-131.518509083416,25.9582658151241"
+                    Point2="-135.518509083416,25.9582658151241"
+                    Point3="-135.518509083416,29.9582658151241" />
+                  <mssgle:LineSegment
+                    End="-135.518509083416,56.8092579305409" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 1]"
+          TopLeft="330.560172369382,168.951850966263">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="12.9250011951971,68.490739975184"
+              Start="0,0"
+              End="12.9250011951971,60.990739975184">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,30.245369987592" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,30.245369987592"
+                    Point2="0,34.245369987592"
+                    Point3="4,34.245369987592" />
+                  <mssgle:LineSegment
+                    End="8.92500119519713,34.245369987592" />
+                  <mssgle:CubicBezierSegment
+                    Point1="8.92500119519713,34.245369987592"
+                    Point2="12.9250011951971,34.245369987592"
+                    Point3="12.9250011951971,38.245369987592" />
+                  <mssgle:LineSegment
+                    End="12.9250011951971,60.990739975184" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 2]"
+          TopLeft="385.751840231246,279.042590941447">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="63.1555490142222,64.6129617675009"
+              Start="0,0"
+              End="63.1555490142222,57.1129617675009">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,22.0808550842678" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,22.0808550842678"
+                    Point2="0,26.0808550842678"
+                    Point3="4,26.0808550842678" />
+                  <mssgle:LineSegment
+                    End="59.1555490142222,26.0808550842678" />
+                  <mssgle:CubicBezierSegment
+                    Point1="59.1555490142222,26.0808550842678"
+                    Point2="63.1555490142222,26.0808550842678"
+                    Point3="63.1555490142222,30.0808550842678" />
+                  <mssgle:LineSegment
+                    End="63.1555490142222,57.1129617675009" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 5]"
+          TopLeft="301.218506897913,237.442590941447">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-213.866655557024,-131.553702488489"
+              Start="0,0"
+              End="-213.866655557024,-124.053702488489">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,-49.1013121290922" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,-49.1013121290922"
+                    Point2="0,-53.1013121290922"
+                    Point3="-4,-53.1013121290922" />
+                  <mssgle:LineSegment
+                    End="-209.866655557024,-53.1013121290922" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-209.866655557024,-53.1013121290922"
+                    Point2="-213.866655557024,-53.1013121290922"
+                    Point3="-213.866655557024,-57.1013121290922" />
+                  <mssgle:LineSegment
+                    End="-213.866655557024,-124.053702488489" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 6]"
+          TopLeft="212.685173564579,258.242590941447">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-73.3740633337405,-34.7425922100656"
+              Start="0,0"
+              End="-65.8740633337405,-34.7425922100656">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="-32.6870316668702,0" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-32.6870316668702,0"
+                    Point2="-36.6870316668702,0"
+                    Point3="-36.6870316668702,-4" />
+                  <mssgle:LineSegment
+                    End="-36.6870316668702,-30.7425922100656" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-36.6870316668702,-30.7425922100656"
+                    Point2="-36.6870316668702,-34.7425922100656"
+                    Point3="-40.6870316668702,-34.7425922100656" />
+                  <mssgle:LineSegment
+                    End="-65.8740633337405,-34.7425922100656" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 7]"
+          TopLeft="385.751840231246,237.442590941447">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="198.322206422853,-76.7425915792718"
+              Start="0,0"
+              End="198.322206422853,-69.2425915792718">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,-26.9769488198398" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,-26.9769488198398"
+                    Point2="0,-30.9769488198398"
+                    Point3="4,-30.9769488198398" />
+                  <mssgle:LineSegment
+                    End="194.322206422853,-30.9769488198398" />
+                  <mssgle:CubicBezierSegment
+                    Point1="194.322206422853,-30.9769488198398"
+                    Point2="198.322206422853,-30.9769488198398"
+                    Point3="198.322206422853,-34.9769488198398" />
+                  <mssgle:LineSegment
+                    End="198.322206422853,-69.2425915792718" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 8]"
+          TopLeft="474.285173564579,266.642590941447">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="149.048125711323,53.516666502439"
+              Start="0,0"
+              End="141.548125711323,53.516666502439">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="51.6685770729038,0" />
+                  <mssgle:CubicBezierSegment
+                    Point1="51.6685770729038,0"
+                    Point2="55.6685770729038,0"
+                    Point3="55.6685770729038,4" />
+                  <mssgle:LineSegment
+                    End="55.6685770729038,49.516666502439" />
+                  <mssgle:CubicBezierSegment
+                    Point1="55.6685770729038,49.516666502439"
+                    Point2="55.6685770729038,53.516666502439"
+                    Point3="59.6685770729038,53.516666502439" />
+                  <mssgle:LineSegment
+                    End="141.548125711323,53.516666502439" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 9]"
+          TopLeft="474.285173564579,252.642590941447">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="176.455531621257,-8.80925781904799"
+              Start="0,0"
+              End="168.955531621257,-8.80925781904799">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="70.5034466845305,0" />
+                  <mssgle:CubicBezierSegment
+                    Point1="70.5034466845305,0"
+                    Point2="74.5034466845305,0"
+                    Point3="74.5034466845305,-4" />
+                  <mssgle:LineSegment
+                    End="74.5034466845305,-4.80925781904799" />
+                  <mssgle:CubicBezierSegment
+                    Point1="74.5034466845305,-4.80925781904799"
+                    Point2="74.5034466845305,-8.80925781904799"
+                    Point3="78.5034466845305,-8.80925781904799" />
+                  <mssgle:LineSegment
+                    End="168.955531621257,-8.80925781904799" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="200.8,41.6"
+          Id="Package\Truncate Patient Table"
+          TopLeft="30.0370369257386,10.9888888507198" />
+        <NodeLayout
+          Size="210.4,41.6"
+          Id="Package\Loading Data into Patient Table"
+          TopLeft="28,69.9222217742378" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 3]"
+          TopLeft="30.0370369257386,31.7888888507198">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-2.03703692573856,58.9333329235179"
+              Start="0,0"
+              End="-9.53703692573856,58.9333329235179">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="-20.5370369257386,0" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-20.5370369257386,0"
+                    Point2="-24.5370369257386,0"
+                    Point3="-24.5370369257386,4" />
+                  <mssgle:LineSegment
+                    End="-24.5370369257386,54.9333329235179" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-24.5370369257386,54.9333329235179"
+                    Point2="-24.5370369257386,58.9333329235179"
+                    Point3="-20.5370369257386,58.9333329235179" />
+                  <mssgle:LineSegment
+                    End="-9.53703692573856,58.9333329235179" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <GroupLayout
+          Text="Patient Table"
+          ParentId="Package"
+          HeaderHeight="43.2"
+          IsExpanded="False"
+          PanelSize="244,154.4"
+          Size="244,43.2"
+          Id="0a9cc390-ca12-40a0-a7a7-b6ba0edbfa86"
+          TopLeft="326.907389245468,343.655552708948">
+          <GroupLayout.ChildrenIds>
+            <s:String>Package\Truncate Patient Table</s:String>
+            <s:String>Package\Loading Data into Patient Table</s:String>
+            <s:String>Package.PrecedenceConstraints[Constraint 3]</s:String>
+          </GroupLayout.ChildrenIds>
+        </GroupLayout>
+        <NodeLayout
+          Size="212,41.6"
+          Id="Package\Loading Data into Test Table"
+          TopLeft="27.1666654828533,87.8333327607982" />
+        <NodeLayout
+          Size="211.2,48"
+          Id="Package\Truncate Test Table"
+          TopLeft="21.3333324682382,14.1666666063998" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 4]"
+          TopLeft="130.049998975546,62.1666666063998">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,25.6666661543985"
+              Start="0,0"
+              End="0,18.1666661543985">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,18.1666661543985" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <GroupLayout
+          Text="Test Table"
+          ParentId="Package"
+          HeaderHeight="43.2"
+          IsExpanded="False"
+          PanelSize="262.4,152.8"
+          Size="262.4,43.2"
+          Id="f31e7be7-19b2-4564-9e47-bd2b7498d729"
+          TopLeft="34.4999978144961,343.351848871988">
+          <GroupLayout.ChildrenIds>
+            <s:String>Package\Loading Data into Test Table</s:String>
+            <s:String>Package\Truncate Test Table</s:String>
+            <s:String>Package.PrecedenceConstraints[Constraint 4]</s:String>
+          </GroupLayout.ChildrenIds>
+        </GroupLayout>
+        <NodeLayout
+          Size="228.8,41.6"
+          Id="Package\Loading Data into Hospital Table"
+          TopLeft="14.2037032281554,87.8333327607982" />
+        <NodeLayout
+          Size="211.2,48"
+          Id="Package\Truncate Hospital Table"
+          TopLeft="21.3333324682382,14.1666666063998" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 4 1]"
+          TopLeft="127.768517848197,62.1666666063998">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,25.6666661543984"
+              Start="0,0"
+              End="0,18.1666661543984">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,18.1666661543984" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <GroupLayout
+          Text="Hospital Table"
+          ParentId="Package"
+          HeaderHeight="43.2"
+          IsExpanded="False"
+          PanelSize="262.4,184.8"
+          Size="104.8,43.2"
+          Id="02d3bc78-4ce9-4b0c-aaf7-64d187a2da27"
+          TopLeft="34.9518513408892,62.6888884529582">
+          <GroupLayout.ChildrenIds>
+            <s:String>Package\Loading Data into Hospital Table</s:String>
+            <s:String>Package\Truncate Hospital Table</s:String>
+            <s:String>Package.PrecedenceConstraints[Constraint 4 1]</s:String>
+          </GroupLayout.ChildrenIds>
+        </GroupLayout>
+        <NodeLayout
+          Size="200.8,41.6"
+          Id="Package\Truncate Doctor Table"
+          TopLeft="30.0370369257386,10.9888888507198" />
+        <NodeLayout
+          Size="210.4,41.6"
+          Id="Package\Loading Data into Doctor Table"
+          TopLeft="28,69.9222217742378" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 3 1]"
+          TopLeft="30.0370369257386,31.7888888507198">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-2.03703692573856,58.9333329235179"
+              Start="0,0"
+              End="-9.53703692573856,58.9333329235179">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="-20.5370369257386,0" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-20.5370369257386,0"
+                    Point2="-24.5370369257386,0"
+                    Point3="-24.5370369257386,4" />
+                  <mssgle:LineSegment
+                    End="-24.5370369257386,54.9333329235179" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-24.5370369257386,54.9333329235179"
+                    Point2="-24.5370369257386,58.9333329235179"
+                    Point3="-20.5370369257386,58.9333329235179" />
+                  <mssgle:LineSegment
+                    End="-9.53703692573856,58.9333329235179" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <GroupLayout
+          Text="Doctor Table"
+          ParentId="Package"
+          HeaderHeight="43.2"
+          IsExpanded="False"
+          PanelSize="244,154.4"
+          Size="97.6,43.2"
+          Id="19dc1d19-8e02-4ac1-b1ef-040b5107911a"
+          TopLeft="41.7111102308389,201.899998731381">
+          <GroupLayout.ChildrenIds>
+            <s:String>Package\Truncate Doctor Table</s:String>
+            <s:String>Package\Loading Data into Doctor Table</s:String>
+            <s:String>Package.PrecedenceConstraints[Constraint 3 1]</s:String>
+          </GroupLayout.ChildrenIds>
+        </GroupLayout>
+        <NodeLayout
+          Size="276,41.6"
+          Id="Package\Loading Data into InsuranceProvider Table"
+          TopLeft="14.2037032281554,87.8333327607982" />
+        <NodeLayout
+          Size="211.2,48"
+          Id="Package\Truncate insuranceProvider Table"
+          TopLeft="21.3333324682382,14.1666666063998" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 4 1 1]"
+          TopLeft="129.968517848197,62.1666666063998">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,25.6666661543984"
+              Start="0,0"
+              End="0,18.1666661543984">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,18.1666661543984" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <GroupLayout
+          Text="InsuranceProvider Table"
+          ParentId="Package"
+          HeaderHeight="43.2"
+          IsExpanded="False"
+          PanelSize="290.4,184.8"
+          Size="152,43.2"
+          Id="312722fd-e190-4246-a215-6977ebff18ec"
+          TopLeft="508.074046654099,117.499999362175">
+          <GroupLayout.ChildrenIds>
+            <s:String>Package\Loading Data into InsuranceProvider Table</s:String>
+            <s:String>Package\Truncate insuranceProvider Table</s:String>
+            <s:String>Package.PrecedenceConstraints[Constraint 4 1 1]</s:String>
+          </GroupLayout.ChildrenIds>
+        </GroupLayout>
+        <NodeLayout
+          Size="276,41.6"
+          Id="Package\Loading Data into Medication Table"
+          TopLeft="14.2037032281554,87.8333327607982" />
+        <NodeLayout
+          Size="211.2,48"
+          Id="Package\Truncate Medication Table 1"
+          TopLeft="21.3333324682382,14.1666666063998" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 4 1 1 1]"
+          TopLeft="129.968517848197,62.1666666063998">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,25.6666661543984"
+              Start="0,0"
+              End="0,18.1666661543984">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,18.1666661543984" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <GroupLayout
+          Text="Medication"
+          ParentId="Package"
+          HeaderHeight="43.2"
+          IsExpanded="False"
+          PanelSize="262.4,184.8"
+          Size="88.8,43.2"
+          Id="973c9251-a12c-4722-aebf-5d6099de78e3"
+          TopLeft="623.333299275902,298.559257443886">
+          <GroupLayout.ChildrenIds>
+            <s:String>Package\Loading Data into Medication Table</s:String>
+            <s:String>Package\Truncate Medication Table 1</s:String>
+            <s:String>Package.PrecedenceConstraints[Constraint 4 1 1 1]</s:String>
+          </GroupLayout.ChildrenIds>
+        </GroupLayout>
+        <NodeLayout
+          Size="276,41.6"
+          Id="Package\Loading Data into Admission Table"
+          TopLeft="14.2037032281554,87.8333327607982" />
+        <NodeLayout
+          Size="199.2,41.6"
+          Id="Package\Truncate Admission Table"
+          TopLeft="21.3333324682382,14.1666666063998" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 4 1 1 1 1]"
+          TopLeft="130.533332468238,55.7666666063998">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="21.6703707599172,32.0666661543984"
+              Start="0,0"
+              End="21.6703707599172,24.5666661543984">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,12.0333330771992" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,12.0333330771992"
+                    Point2="0,16.0333330771992"
+                    Point3="4,16.0333330771992" />
+                  <mssgle:LineSegment
+                    End="17.6703707599172,16.0333330771992" />
+                  <mssgle:CubicBezierSegment
+                    Point1="17.6703707599172,16.0333330771992"
+                    Point2="21.6703707599172,16.0333330771992"
+                    Point3="21.6703707599172,20.0333330771992" />
+                  <mssgle:LineSegment
+                    End="21.6703707599172,24.5666661543984" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <GroupLayout
+          Text="Admission"
+          ParentId="Package"
+          HeaderHeight="43.2"
+          IsExpanded="False"
+          PanelSize="295.2,184.8"
+          Size="86.4,43.2"
+          Id="5d6a57da-c027-46c1-a16c-06d38484e154"
+          TopLeft="650.740705185836,222.233333122399">
+          <GroupLayout.ChildrenIds>
+            <s:String>Package\Loading Data into Admission Table</s:String>
+            <s:String>Package\Truncate Admission Table</s:String>
+            <s:String>Package.PrecedenceConstraints[Constraint 4 1 1 1 1]</s:String>
+          </GroupLayout.ChildrenIds>
+        </GroupLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\Loading Whole Dataset into Base Table">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="151.2,41.6"
+          Id="Package\Loading Whole Dataset into Base Table\Flat File Source"
+          TopLeft="156.666658106778,72.7999994937579" />
+        <NodeLayout
+          Size="171.2,41.6"
+          Id="Package\Loading Whole Dataset into Base Table\OLE DB Destination"
+          TopLeft="145.833325365352,207.133331892954" />
+        <EdgeLayout
+          Id="Package\Loading Whole Dataset into Base Table.Paths[Flat File Source Output]"
+          TopLeft="231.849991736065,114.399999493758">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,92.7333323991957"
+              Start="0,0"
+              End="0,85.2333323991957">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,85.2333323991957" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Loading Whole Dataset into Base Table\OLE DB Destination">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>
