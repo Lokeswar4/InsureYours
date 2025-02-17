@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34221.43
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{C9674DCB-5085-4A16-B785-4C70DD1589BD}") = "Healthcare_GroupProject", "Healthcare_GroupProject.dtproj", "{412EDB71-20AB-4E1C-82E8-507538921EEF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Azure|Default = Azure|Default
+		Development|Default = Development|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{412EDB71-20AB-4E1C-82E8-507538921EEF}.Azure|Default.ActiveCfg = Azure
+		{412EDB71-20AB-4E1C-82E8-507538921EEF}.Azure|Default.Build.0 = Azure
+		{412EDB71-20AB-4E1C-82E8-507538921EEF}.Development|Default.ActiveCfg = Development
+		{412EDB71-20AB-4E1C-82E8-507538921EEF}.Development|Default.Build.0 = Development
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {335C7247-A125-4C7F-B3C3-B6568D1BE53E}
+	EndGlobalSection
+EndGlobal
