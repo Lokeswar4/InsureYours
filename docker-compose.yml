@@ -1,0 +1,64 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: insureyours-db
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD:-insureyours}
+      MYSQL_DATABASE: Healthcare_Group_Project
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./Tables_Creation.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  etl:
+    build: .
+    container_name: insureyours-etl
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-insureyours}
+    entrypoint: ["python3", "etl_load.py", "--host", "mysql", "--user", "root", "--password", "${MYSQL_PASSWORD:-insureyours}"]
+    volumes:
+      - ./healthcare_dataset.csv:/app/healthcare_dataset.csv:ro
+
+  analysis:
+    image: mysql:8.0
+    container_name: insureyours-analysis
+    depends_on:
+      etl:
+        condition: service_completed_successfully
+    environment:
+      MYSQL_PWD: ${MYSQL_PASSWORD:-insureyours}
+    volumes:
+      - ./StoredProcedure.sql:/scripts/StoredProcedure.sql:ro
+      - ./Analysis.sql:/scripts/Analysis.sql:ro
+      - ./Advanced_Analysis.sql:/scripts/Advanced_Analysis.sql:ro
+      - ./docker/run_analysis.sh:/scripts/run_analysis.sh:ro
+    entrypoint: ["bash", "/scripts/run_analysis.sh"]
+
+  api:
+    build: .
+    container_name: insureyours-api
+    depends_on:
+      analysis:
+        condition: service_completed_successfully
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-insureyours}
+    entrypoint: ["python3", "api.py", "--host", "0.0.0.0", "--db-host", "mysql", "--db-password", "${MYSQL_PASSWORD:-insureyours}"]
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+volumes:
+  mysql_data:

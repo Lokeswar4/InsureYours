@@ -1,0 +1,109 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    name: Lint (ruff)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --group dev
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+
+  test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --group dev
+      - run: uv run pytest tests/ -v
+
+  integration:
+    name: Full Pipeline (MySQL)
+    runs-on: ubuntu-latest
+    needs: [lint, test]
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: testpass
+          MYSQL_DATABASE: Healthcare_Group_Project
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -uroot -ptestpass"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync
+
+      - name: Install MySQL client
+        run: sudo apt-get update && sudo apt-get install -y mysql-client
+
+      - name: Generate test dataset
+        run: |
+          uv run python -c "
+          import csv, random
+          random.seed(42)
+          conditions = ['Diabetes','Asthma','Obesity','Arthritis','Hypertension','Cancer']
+          genders = ['Male','Female']
+          blood_types = ['A+','A-','B+','B-','AB+','AB-','O+','O-']
+          admission_types = ['Elective','Emergency','Urgent']
+          medications = ['Aspirin','Lipitor','Ibuprofen','Penicillin','Paracetamol']
+          results = ['Normal','Abnormal','Inconclusive']
+          insurers = ['Medicare','UnitedHealthcare','Aetna','Cigna','Blue Cross']
+          hospitals = ['General Hospital','City Medical','County Health']
+          doctors = ['Dr. Smith','Dr. Jones','Dr. Brown','Dr. Wilson']
+          names = ['Alice Test','Bob Test','Carol Test','David Test','Eve Test',
+                   'Frank Test','Grace Test','Hank Test','Iris Test','Jack Test']
+          with open('healthcare_dataset.csv','w',newline='') as f:
+              w = csv.writer(f)
+              w.writerow(['Name','Age','Gender','Blood Type','Medical Condition',
+                          'Date of Admission','Doctor','Hospital','Insurance Provider',
+                          'Billing Amount','Room Number','Admission Type',
+                          'Discharge Date','Medication','Test Results'])
+              for i in range(200):
+                  w.writerow([
+                      random.choice(names), random.randint(1,90),
+                      random.choice(genders), random.choice(blood_types),
+                      random.choice(conditions), '2023-01-15', random.choice(doctors),
+                      random.choice(hospitals), random.choice(insurers),
+                      round(random.uniform(1000,50000),2), random.randint(100,500),
+                      random.choice(admission_types), '2023-01-25',
+                      random.choice(medications), random.choice(results)
+                  ])
+          print('Generated 200-row test dataset')
+          "
+
+      - name: Create schema
+        run: mysql -h 127.0.0.1 -u root -ptestpass < Tables_Creation.sql
+
+      - name: Run ETL
+        run: uv run python etl_load.py --host 127.0.0.1 --user root --password testpass
+
+      - name: Create procedures and run analysis
+        run: |
+          mysql -h 127.0.0.1 -u root -ptestpass Healthcare_Group_Project < StoredProcedure.sql
+          mysql -h 127.0.0.1 -u root -ptestpass Healthcare_Group_Project < Analysis.sql
+          mysql -h 127.0.0.1 -u root -ptestpass Healthcare_Group_Project < Advanced_Analysis.sql
+
+      - name: Verify results
+        run: |
+          mysql -h 127.0.0.1 -u root -ptestpass Healthcare_Group_Project -e "
+            SELECT COUNT(*) AS recommendation_count FROM Health_Data_Analysis;
+            SELECT * FROM Health_Data_Analysis LIMIT 5;
+            CALL Avg_BillingAmount_Per_AgeGroup_MedicalCondition();
+          "

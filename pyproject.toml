@@ -1,0 +1,60 @@
+[project]
+name = "insureyours"
+version = "1.0.0"
+description = "Healthcare insurance cost analytics pipeline with ETL, statistical analysis, and REST API"
+readme = "README.md"
+license = {text = "GPL-3.0-or-later"}
+requires-python = ">=3.10"
+dependencies = [
+    "mysql-connector-python>=8.0.0,<9.0.0",
+    "fastapi>=0.100.0",
+    "uvicorn>=0.20.0",
+    "scipy>=1.10.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=7.0.0",
+    "ruff>=0.4.0",
+    "httpx>=0.24.0",       # FastAPI TestClient transport
+]
+notebook = [
+    "pandas>=2.0.0",
+    "matplotlib>=3.7.0",
+    "seaborn>=0.12.0",
+    "jupyter>=1.0.0",
+    "ipykernel>=6.0.0",
+]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+select = [
+    "E",     # pycodestyle errors
+    "W",     # pycodestyle warnings
+    "F",     # pyflakes
+    "I",     # isort
+    "N",     # pep8-naming
+    "UP",    # pyupgrade
+    "B",     # flake8-bugbear
+    "S",     # flake8-bandit (security)
+    "SIM",   # flake8-simplify
+    "RUF",   # ruff-specific rules
+]
+ignore = [
+    "S101",  # assert usage OK in tests
+    "S104",  # binding to 0.0.0.0 is intentional for API server
+    "S608",  # SQL injection — we use parameterized queries where user input exists
+    "E501",  # line too long — handled by formatter
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

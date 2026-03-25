@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InsureYours — Healthcare Cost Intelligence</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg:     #0f172a;
+      --card:   #1e293b;
+      --border: #334155;
+      --text:   #f1f5f9;
+      --muted:  #94a3b8;
+      --accent: #38bdf8;
+      --green:  #4ade80;
+      --yellow: #fbbf24;
+      --red:    #f87171;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg); color: var(--text); min-height: 100vh;
+    }
+    header {
+      background: var(--card); border-bottom: 1px solid var(--border);
+      padding: 1rem 2rem; display: flex; align-items: center; gap: 1rem;
+    }
+    header h1 { font-size: 1.375rem; font-weight: 700; color: var(--accent); }
+    header p  { color: var(--muted); font-size: .8125rem; }
+    header nav { margin-left: auto; display: flex; gap: 1.25rem; font-size: .8125rem; }
+    header nav a { color: var(--muted); text-decoration: none; transition: color .15s; }
+    header nav a:hover { color: var(--accent); }
+
+    main {
+      max-width: 1280px; margin: 1.75rem auto; padding: 0 1.5rem;
+      display: grid; grid-template-columns: 360px 1fr; gap: 1.5rem; align-items: start;
+    }
+    @media (max-width: 800px) { main { grid-template-columns: 1fr; } }
+
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: .75rem; padding: 1.375rem;
+    }
+    .card + .card { margin-top: 1.5rem; }
+    .card-title {
+      font-size: .75rem; font-weight: 600; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .06em; margin-bottom: 1.125rem;
+    }
+
+    .form-group { margin-bottom: .875rem; }
+    label { display: block; font-size: .8125rem; color: var(--muted); margin-bottom: .3rem; font-weight: 500; }
+    input[type=number], select {
+      width: 100%; background: var(--bg); border: 1px solid var(--border);
+      color: var(--text); padding: .5rem .75rem; border-radius: .5rem;
+      font-size: .875rem; outline: none; transition: border-color .15s;
+    }
+    input:focus, select:focus { border-color: var(--accent); }
+    select option { background: var(--card); }
+
+    .btn {
+      width: 100%; background: var(--accent); color: #0f172a; border: none;
+      padding: .625rem 1rem; border-radius: .5rem; font-size: .875rem;
+      font-weight: 700; cursor: pointer; transition: opacity .15s; margin-top: .375rem;
+    }
+    .btn:hover    { opacity: .88; }
+    .btn:disabled { opacity: .45; cursor: not-allowed; }
+
+    #results { margin-top: 1.125rem; }
+    .result-item {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: .5rem; padding: .875rem 1rem; margin-bottom: .625rem;
+    }
+    .result-item.best { border-color: var(--green); }
+    .result-label { font-size: .75rem; color: var(--muted); margin-bottom: .2rem; }
+    .result-name  { font-size: 1.0625rem; font-weight: 700; }
+    .result-price { font-size: 1.375rem; font-weight: 700; color: var(--green); margin: .2rem 0; }
+    .result-meta  { font-size: .8rem; color: var(--muted); }
+
+    .right { display: flex; flex-direction: column; gap: 1.5rem; }
+    .chart-wrap { position: relative; height: 270px; }
+
+    table { width: 100%; border-collapse: collapse; font-size: .8125rem; }
+    th { color: var(--muted); font-weight: 500; text-align: left; padding: .5rem .625rem; border-bottom: 1px solid var(--border); }
+    td { padding: .5rem .625rem; border-bottom: 1px solid rgba(51,65,85,.45); }
+    tr:last-child td { border-bottom: none; }
+
+    .badge {
+      display: inline-block; padding: .1rem .45rem; border-radius: 9999px;
+      font-size: .7rem; font-weight: 700; margin-left: .375rem; vertical-align: middle;
+    }
+    .badge-green { background: rgba(74,222,128,.12); color: var(--green); }
+    .badge-red   { background: rgba(248,113,113,.12); color: var(--red); }
+
+    .bar-bg   { background: var(--border); border-radius: 4px; height: 5px; width: 100%; min-width: 60px; }
+    .bar-fill { background: var(--accent); height: 100%; border-radius: 4px; transition: width .4s; }
+
+    .empty { color: var(--muted); font-size: .875rem; text-align: center; padding: 1.5rem 0; }
+    .error {
+      color: var(--red); font-size: .875rem; padding: .625rem .875rem;
+      background: rgba(248,113,113,.08); border: 1px solid rgba(248,113,113,.25);
+      border-radius: .5rem; margin-top: .5rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>InsureYours</h1>
+    <p>Healthcare Cost Intelligence</p>
+  </div>
+  <nav>
+    <a href="/docs">API Docs</a>
+    <a href="/health">Health</a>
+  </nav>
+</header>
+
+<main>
+  <!-- Left: Recommend form -->
+  <div>
+    <div class="card">
+      <div class="card-title">Find Best Insurer</div>
+      <form id="form">
+        <div class="form-group">
+          <label for="age">Patient Age</label>
+          <input type="number" id="age" min="0" max="150" placeholder="e.g. 45" required>
+        </div>
+        <div class="form-group">
+          <label for="condition">Medical Condition</label>
+          <select id="condition" required>
+            <option value="">Select condition…</option>
+            <option>Arthritis</option><option>Asthma</option><option>Cancer</option>
+            <option>Diabetes</option><option>Hypertension</option><option>Obesity</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="blood_type">Blood Type</label>
+          <select id="blood_type" required>
+            <option value="">Select blood type…</option>
+            <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+            <option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="medication">Medication</label>
+          <select id="medication" required>
+            <option value="">Select medication…</option>
+            <option>Aspirin</option><option>Ibuprofen</option><option>Lipitor</option>
+            <option>Paracetamol</option><option>Penicillin</option>
+          </select>
+        </div>
+        <button class="btn" type="submit" id="submit-btn">Find Best Insurer</button>
+      </form>
+      <div id="results"></div>
+    </div>
+  </div>
+
+  <!-- Right: Charts -->
+  <div class="right">
+    <div class="card">
+      <div class="card-title">Average Billing by Condition</div>
+      <div class="chart-wrap"><canvas id="billing-chart"></canvas></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        Provider Comparison
+        <span id="compare-cond" style="color:var(--accent);text-transform:none;font-size:.8rem;font-weight:400;margin-left:.5rem;"></span>
+      </div>
+      <div id="compare-body">
+        <p class="empty">Select a condition above to compare providers.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        High-Cost Outliers
+        <span style="color:var(--muted);font-weight:400;text-transform:none;font-size:.75rem;">&gt;2 StdDev above condition mean</span>
+      </div>
+      <div id="outlier-body"><p class="empty">Loading…</p></div>
+    </div>
+  </div>
+</main>
+
+<script>
+  // Escape untrusted strings before inserting into DOM
+  function esc(s) {
+    const d = document.createElement('div');
+    d.appendChild(document.createTextNode(String(s)));
+    return d.innerHTML;
+  }
+
+  const fmt  = v => '$' + Number(v).toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
+  const fmtK = v => '$' + (v/1000).toFixed(0) + 'k';
+
+  // ── Billing Summary Chart ─────────────────────────────────────────────
+  async function loadBillingChart() {
+    const wrap = document.querySelector('.chart-wrap');
+    try {
+      const res  = await fetch('/analytics/billing-summary');
+      if (!res.ok) throw new Error('API unavailable');
+      const data = (await res.json()).data;
+
+      const acc = {};
+      for (const row of data) {
+        if (!acc[row.condition]) acc[row.condition] = {sum: 0, n: 0};
+        acc[row.condition].sum += row.avg_billing;
+        acc[row.condition].n++;
+      }
+      const labels = Object.keys(acc).sort();
+      const values = labels.map(c => Math.round(acc[c].sum / acc[c].n));
+      const colors = ['#38bdf8','#818cf8','#a78bfa','#f472b6','#fb923c','#4ade80'];
+
+      new Chart(document.getElementById('billing-chart'), {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [{data: values, backgroundColor: colors, borderRadius: 6, borderWidth: 0}]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: {
+            legend: {display: false},
+            tooltip: {callbacks: {label: ctx => fmt(ctx.raw)}}
+          },
+          scales: {
+            x: {ticks: {color:'#94a3b8', font:{size:11}}, grid: {color:'#1e293b'}},
+            y: {ticks: {color:'#94a3b8', font:{size:11}, callback: fmtK}, grid: {color:'#334155'}}
+          }
+        }
+      });
+    } catch (e) {
+      wrap.innerHTML = '<p class="error">' + esc(e.message) + '</p>';
+    }
+  }
+
+  // ── Provider Comparison Table ─────────────────────────────────────────
+  async function loadComparison(condition) {
+    const body  = document.getElementById('compare-body');
+    const label = document.getElementById('compare-cond');
+    label.textContent = '— ' + condition;  // textContent is safe
+    body.innerHTML = '<p class="empty">Loading…</p>';
+
+    try {
+      const res  = await fetch('/analytics/provider-compare?condition=' + encodeURIComponent(condition));
+      if (!res.ok) throw new Error('No data for this condition');
+      const rows = (await res.json()).providers;
+
+      const best = {};
+      for (const r of rows) {
+        if (!best[r.insurer] || r.avg_billing < best[r.insurer]) best[r.insurer] = r.avg_billing;
+      }
+      const sorted = Object.entries(best).sort((a, b) => a[1] - b[1]);
+      const min = sorted[0][1], max = sorted[sorted.length - 1][1], range = max - min || 1;
+
+      const tbody = document.createElement('tbody');
+      sorted.forEach(([insurer, avg], i) => {
+        const pct  = Math.round((avg - min) / range * 100);
+        const tr   = document.createElement('tr');
+
+        const tdName = document.createElement('td');
+        tdName.textContent = insurer;
+        if (i === 0) {
+          const b = document.createElement('span');
+          b.className = 'badge badge-green'; b.textContent = 'Cheapest';
+          tdName.appendChild(b);
+        } else if (i === sorted.length - 1) {
+          const b = document.createElement('span');
+          b.className = 'badge badge-red'; b.textContent = 'Most Exp.';
+          tdName.appendChild(b);
+        }
+
+        const tdPrice = document.createElement('td');
+        tdPrice.textContent = fmt(avg);
+        tdPrice.style.cssText = 'font-weight:600;color:var(--green)';
+
+        const tdBar = document.createElement('td');
+        tdBar.style.width = '120px';
+        tdBar.innerHTML = '<div class="bar-bg"><div class="bar-fill" style="width:' + (100 - pct) + '%"></div></div>';
+
+        tr.appendChild(tdName); tr.appendChild(tdPrice); tr.appendChild(tdBar);
+        tbody.appendChild(tr);
+      });
+
+      const table = document.createElement('table');
+      table.innerHTML = '<thead><tr><th>Provider</th><th>Avg Billing</th><th>Relative Cost</th></tr></thead>';
+      table.appendChild(tbody);
+      body.innerHTML = '';
+      body.appendChild(table);
+    } catch (e) {
+      body.innerHTML = '<p class="error">' + esc(e.message) + '</p>';
+    }
+  }
+
+  // ── Outlier Table ─────────────────────────────────────────────────────
+  async function loadOutliers() {
+    const el = document.getElementById('outlier-body');
+    try {
+      const res  = await fetch('/analytics/outliers');
+      if (!res.ok) throw new Error('API unavailable');
+      const rows = (await res.json()).outliers;
+
+      if (!rows.length) { el.innerHTML = '<p class="empty">No outliers detected.</p>'; return; }
+
+      const tbody = document.createElement('tbody');
+      for (const r of rows) {
+        const tr = document.createElement('tr');
+        const cells = [
+          {text: r.condition, style: ''},
+          {text: r.outlier_count, style: 'color:var(--yellow);font-weight:600'},
+          {text: fmt(r.avg_outlier_bill), style: 'color:var(--red)'},
+          {text: fmt(r.threshold), style: 'color:var(--muted)'},
+        ];
+        for (const c of cells) {
+          const td = document.createElement('td');
+          td.textContent = c.text;
+          if (c.style) td.style.cssText = c.style;
+          tr.appendChild(td);
+        }
+        tbody.appendChild(tr);
+      }
+
+      const table = document.createElement('table');
+      table.innerHTML = '<thead><tr><th>Condition</th><th>Outlier Claims</th><th>Avg Outlier Bill</th><th>Threshold</th></tr></thead>';
+      table.appendChild(tbody);
+      el.innerHTML = '';
+      el.appendChild(table);
+    } catch (e) {
+      el.innerHTML = '<p class="error">' + esc(e.message) + '</p>';
+    }
+  }
+
+  // ── Recommend Form ────────────────────────────────────────────────────
+  document.getElementById('form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const btn       = document.getElementById('submit-btn');
+    const results   = document.getElementById('results');
+    const condition = document.getElementById('condition').value;
+
+    btn.disabled = true; btn.textContent = 'Searching…';
+    results.innerHTML = '';
+
+    const params = new URLSearchParams({
+      age:        document.getElementById('age').value,
+      condition,
+      blood_type: document.getElementById('blood_type').value,
+      medication: document.getElementById('medication').value,
+    });
+
+    try {
+      const res  = await fetch('/recommend?' + params);
+      const data = await res.json();
+
+      if (!res.ok) {
+        const errDiv = document.createElement('div');
+        errDiv.className = 'error';
+        errDiv.textContent = data.detail?.message || 'No data found for this profile.';
+        results.appendChild(errDiv);
+      } else {
+        const profile = data.patient_profile;
+        const wrap = document.createElement('div');
+        wrap.style.cssText = 'padding-top:.875rem;margin-top:.875rem;border-top:1px solid var(--border)';
+
+        const meta = document.createElement('p');
+        meta.style.cssText = 'font-size:.8rem;color:var(--muted);margin-bottom:.75rem';
+        meta.innerHTML = 'Age group: <strong style="color:var(--text)">' + esc(profile.age_group) + '</strong>';
+        wrap.appendChild(meta);
+
+        for (const [i, r] of data.recommendation.entries()) {
+          const card = document.createElement('div');
+          card.className = 'result-item' + (i === 0 ? ' best' : '');
+
+          const lbl = document.createElement('div'); lbl.className = 'result-label';
+          lbl.textContent = i === 0 ? '✓ Best choice' : 'Rank #' + r.rank;
+
+          const name = document.createElement('div'); name.className = 'result-name';
+          name.textContent = r.insurer;
+
+          const price = document.createElement('div'); price.className = 'result-price';
+          price.textContent = fmt(r.avg_billing);
+
+          const meta2 = document.createElement('div'); meta2.className = 'result-meta';
+          meta2.textContent = 'Range ' + fmt(r.min_billing) + ' – ' + fmt(r.max_billing)
+            + '  ·  ' + r.claim_count + ' claim' + (r.claim_count !== 1 ? 's' : '');
+
+          card.appendChild(lbl); card.appendChild(name);
+          card.appendChild(price); card.appendChild(meta2);
+          wrap.appendChild(card);
+        }
+        results.appendChild(wrap);
+        loadComparison(condition);
+      }
+    } catch (err) {
+      const errDiv = document.createElement('div');
+      errDiv.className = 'error';
+      errDiv.textContent = 'API unavailable: ' + err.message;
+      results.appendChild(errDiv);
+    } finally {
+      btn.disabled = false; btn.textContent = 'Find Best Insurer';
+    }
+  });
+
+  document.getElementById('condition').addEventListener('change', e => {
+    if (e.target.value) loadComparison(e.target.value);
+  });
+
+  loadBillingChart();
+  loadOutliers();
+</script>
+</body>
+</html>
