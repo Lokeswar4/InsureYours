@@ -3,8 +3,8 @@
   DTS:refId="Package"
   DTS:CreationDate="12/11/2023 3:15:19 PM"
   DTS:CreationName="Microsoft.Package"
-  DTS:CreatorComputerName="LOKESWAR"
-  DTS:CreatorName="Lokeswar\Lokeswar"
+  DTS:CreatorComputerName="YOURSERVER"
+  DTS:CreatorName="YOURSERVER\YOURUSER"
   DTS:DTSID="{7E1475CB-CE28-4BD1-8D4E-DDFA609EF0D1}"
   DTS:ExecutableType="Microsoft.Package"
   DTS:LastModifiedProductVersion="16.0.5314.0"
@@ -17,15 +17,15 @@
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
     <DTS:ConnectionManager
-      DTS:refId="Package.ConnectionManagers[Lokeswar\DEV.Healthcare_Final_Project]"
+      DTS:refId="Package.ConnectionManagers[YOURSERVER\DEV.Healthcare_Final_Project]"
       DTS:CreationName="OLEDB"
       DTS:DTSID="{F393808F-8A52-4C4F-84E4-ECC8BFC3E418}"
-      DTS:ObjectName="Lokeswar\DEV.Healthcare_Final_Project">
+      DTS:ObjectName="YOURSERVER\DEV.Healthcare_Final_Project">
       <DTS:ObjectData>
         <DTS:ConnectionManager
           DTS:ConnectRetryCount="1"
           DTS:ConnectRetryInterval="5"
-          DTS:ConnectionString="Data Source=Lokeswar\DEV;Initial Catalog=Healthcare_Group_Project;Provider=MSOLEDBSQL.1;Integrated Security=SSPI;Auto Translate=False;Application Name=SSIS-HealthCare-{F393808F-8A52-4C4F-84E4-ECC8BFC3E418}Lokeswar\DEV.Healthcare_Final_Project;" />
+          DTS:ConnectionString="Data Source=YOURSERVER\DEV;Initial Catalog=Healthcare_Group_Project;Provider=MSOLEDBSQL.1;Integrated Security=SSPI;Auto Translate=False;" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
   </DTS:ConnectionManagers>
@@ -681,8 +681,8 @@
               <connections>
                 <connection
                   refId="Package\Loading Whole Dataset into Base Table\OLE DB Destination.Connections[OleDbConnection]"
-                  connectionManagerID="Package.ConnectionManagers[Lokeswar\DEV.Healthcare_Final_Project]"
-                  connectionManagerRefId="Package.ConnectionManagers[Lokeswar\DEV.Healthcare_Final_Project]"
+                  connectionManagerID="Package.ConnectionManagers[YOURSERVER\DEV.Healthcare_Final_Project]"
+                  connectionManagerRefId="Package.ConnectionManagers[YOURSERVER\DEV.Healthcare_Final_Project]"
                   description="The OLE DB runtime connection used to access the database."
                   name="OleDbConnection" />
               </connections>

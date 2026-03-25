@@ -13,7 +13,7 @@
       DTS:RowDelimiter=""
       DTS:TextQualifier="_x003C_none_x003E_"
       DTS:CodePage="1252"
-      DTS:ConnectionString="C:\Users\lokes\OneDrive\Desktop\DATA-604\HealthCare_Final_Project\healthcare_dataset.csv">
+      DTS:ConnectionString=".\healthcare_dataset.csv">
       <DTS:FlatFileColumns>
         <DTS:FlatFileColumn
           DTS:ColumnType="Delimited"
