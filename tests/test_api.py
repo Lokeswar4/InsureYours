@@ -1,7 +1,8 @@
 """API endpoint tests — no real MySQL connection required (pool is mocked)."""
 
-import sys
 import os
+import sys
+from typing import ClassVar
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -53,7 +54,9 @@ class TestRecommendValidation:
         assert client.get("/recommend?age=45&blood_type=O%2B&medication=Aspirin").status_code == 422
 
     def test_missing_blood_type(self):
-        assert client.get("/recommend?age=45&condition=Diabetes&medication=Aspirin").status_code == 422
+        assert (
+            client.get("/recommend?age=45&condition=Diabetes&medication=Aspirin").status_code == 422
+        )
 
     def test_age_negative(self):
         r = client.get("/recommend?age=-1&condition=Diabetes&blood_type=O%2B&medication=Aspirin")
@@ -72,7 +75,9 @@ class TestRecommendValidation:
     def test_age_boundary_150(self):
         """age=150 passes validation; 404 because no matching DB row."""
         with patch("api.pool", _mock_pool([])):
-            r = client.get("/recommend?age=150&condition=Diabetes&blood_type=O%2B&medication=Aspirin")
+            r = client.get(
+                "/recommend?age=150&condition=Diabetes&blood_type=O%2B&medication=Aspirin"
+            )
         assert r.status_code == 404
 
 
@@ -80,7 +85,7 @@ class TestRecommendValidation:
 # /recommend — success paths
 # ---------------------------------------------------------------------------
 class TestRecommend:
-    _ROW = {
+    _ROW: ClassVar[dict] = {
         "InsuranceProvider": "Aetna",
         "AvgBillingAmount": 23000.50,
         "MinBillingAmount": 15000.00,
@@ -91,18 +96,24 @@ class TestRecommend:
 
     def test_found_returns_200(self):
         with patch("api.pool", _mock_pool([self._ROW])):
-            r = client.get("/recommend?age=45&condition=Diabetes&blood_type=O%2B&medication=Aspirin")
+            r = client.get(
+                "/recommend?age=45&condition=Diabetes&blood_type=O%2B&medication=Aspirin"
+            )
         assert r.status_code == 200
 
     def test_age_group_mapped_correctly(self):
         with patch("api.pool", _mock_pool([self._ROW])):
-            r = client.get("/recommend?age=45&condition=Diabetes&blood_type=O%2B&medication=Aspirin")
+            r = client.get(
+                "/recommend?age=45&condition=Diabetes&blood_type=O%2B&medication=Aspirin"
+            )
         body = r.json()
         assert body["patient_profile"]["age_group"] == "31-45"
 
     def test_recommendation_fields(self):
         with patch("api.pool", _mock_pool([self._ROW])):
-            r = client.get("/recommend?age=45&condition=Diabetes&blood_type=O%2B&medication=Aspirin")
+            r = client.get(
+                "/recommend?age=45&condition=Diabetes&blood_type=O%2B&medication=Aspirin"
+            )
         rec = r.json()["recommendation"][0]
         assert rec["insurer"] == "Aetna"
         assert rec["avg_billing"] == pytest.approx(23000.50)
@@ -110,7 +121,9 @@ class TestRecommend:
 
     def test_not_found_returns_404(self):
         with patch("api.pool", _mock_pool([])):
-            r = client.get("/recommend?age=45&condition=Diabetes&blood_type=O%2B&medication=Aspirin")
+            r = client.get(
+                "/recommend?age=45&condition=Diabetes&blood_type=O%2B&medication=Aspirin"
+            )
         assert r.status_code == 404
         assert "searched" in r.json()["detail"]
 
@@ -138,7 +151,7 @@ class TestLists:
 # /analytics/billing-summary
 # ---------------------------------------------------------------------------
 class TestBillingSummary:
-    _ROW = {
+    _ROW: ClassVar[dict] = {
         "AgeGroup": "31-45",
         "MedicalCondition": "Diabetes",
         "avg_billing": 25000.0,
@@ -163,14 +176,21 @@ class TestBillingSummary:
         with patch("api.pool", _mock_pool([self._ROW])):
             r = client.get("/analytics/billing-summary")
         row = r.json()["data"][0]
-        assert {"age_group", "condition", "avg_billing", "claim_count", "min_billing", "max_billing"} <= row.keys()
+        assert {
+            "age_group",
+            "condition",
+            "avg_billing",
+            "claim_count",
+            "min_billing",
+            "max_billing",
+        } <= row.keys()
 
 
 # ---------------------------------------------------------------------------
 # /analytics/provider-compare
 # ---------------------------------------------------------------------------
 class TestProviderCompare:
-    _ROW = {
+    _ROW: ClassVar[dict] = {
         "InsuranceProvider": "Aetna",
         "AgeGroup": "31-45",
         "avg_billing": 23000.0,
@@ -198,7 +218,7 @@ class TestProviderCompare:
 # /analytics/outliers
 # ---------------------------------------------------------------------------
 class TestOutliers:
-    _ROW = {
+    _ROW: ClassVar[dict] = {
         "MedicalCondition": "Diabetes",
         "outlier_count": 5,
         "avg_outlier_bill": 48000.0,
@@ -215,7 +235,13 @@ class TestOutliers:
         with patch("api.pool", _mock_pool([self._ROW])):
             r = client.get("/analytics/outliers")
         row = r.json()["outliers"][0]
-        assert {"condition", "outlier_count", "avg_outlier_bill", "condition_mean", "threshold"} <= row.keys()
+        assert {
+            "condition",
+            "outlier_count",
+            "avg_outlier_bill",
+            "condition_mean",
+            "threshold",
+        } <= row.keys()
 
     def test_empty_result(self):
         with patch("api.pool", _mock_pool([])):
