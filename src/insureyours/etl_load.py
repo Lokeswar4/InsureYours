@@ -31,7 +31,9 @@ except ImportError:
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
-DEFAULT_CSV = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "healthcare_dataset.csv")
+DEFAULT_CSV = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "..", "..", "healthcare_dataset.csv"
+)
 DATABASE = "Healthcare_Group_Project"
 
 # Expected CSV columns (in order)
