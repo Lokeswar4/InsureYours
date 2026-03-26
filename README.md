@@ -45,12 +45,12 @@ This project is designed to showcase both **Data Engineering** and **Data Analys
 
 | Skill | Where |
 |-------|-------|
-| ETL pipeline design | `etl_load.py` — CSV validation, staging, FK resolution |
-| Database schema design | `Tables_Creation.sql` — normalized star schema with constraints |
-| REST API development | `api.py` — FastAPI with connection pooling, Swagger docs |
+| ETL pipeline design | `src/insureyours/etl_load.py` — CSV validation, staging, FK resolution |
+| Database schema design | `sql/01_schema.sql` — normalized star schema with constraints |
+| REST API development | `src/insureyours/api.py` — FastAPI with connection pooling, Swagger docs |
 | Docker containerization | `docker-compose.yml` — multi-service orchestration |
 | CI/CD pipeline | `.github/workflows/ci.yml` — unit + integration tests |
-| Data quality validation | `data_profiler.py` — automated quality checks with scoring |
+| Data quality validation | `src/insureyours/data_profiler.py` — automated quality checks with scoring |
 | Idempotent scripts | All SQL and ETL scripts are safe to re-run |
 
 ### Data Analyst
@@ -58,11 +58,11 @@ This project is designed to showcase both **Data Engineering** and **Data Analys
 | Skill | Where |
 |-------|-------|
 | Exploratory Data Analysis | `notebooks/exploratory_analysis.ipynb` — distributions, trends, heatmaps |
-| EDA (automated report) | `data_profiler.py` — cardinality, percentiles, outliers, quality score |
-| Statistical hypothesis testing | `statistical_analysis.py` — Welch's t-test, ANOVA, Cohen's d |
-| Confidence intervals | `statistical_analysis.py` — 95% CIs for provider means |
-| Window functions | `Advanced_Analysis.sql` — DENSE_RANK, ROW_NUMBER, LAG, running totals |
-| Business insight generation | `Analysis.sql` — actionable "cheapest insurer" recommendations |
+| EDA (automated report) | `src/insureyours/data_profiler.py` — cardinality, percentiles, outliers, quality score |
+| Statistical hypothesis testing | `src/insureyours/statistical_analysis.py` — Welch's t-test, ANOVA, Cohen's d |
+| Confidence intervals | `src/insureyours/statistical_analysis.py` — 95% CIs for provider means |
+| Window functions | `sql/04_advanced.sql` — DENSE_RANK, ROW_NUMBER, LAG, running totals |
+| Business insight generation | `sql/03_analysis.sql` — actionable "cheapest insurer" recommendations |
 | Data visualization prep | Stored procedures + Power BI dashboard |
 
 ---
@@ -95,19 +95,19 @@ This project is designed to showcase both **Data Engineering** and **Data Analys
 
 | Analysis | Tool | What It Answers |
 |----------|------|-----------------|
-| Billing by demographics | `StoredProcedure.sql` | Which age groups and conditions face highest costs? |
-| Provider cost comparison | `StoredProcedure.sql` | How do insurers compare on price? |
-| Cost per day of stay | `StoredProcedure.sql` | Is a "cheap" insurer actually cheap, or just shorter stays? |
-| Optimal insurer ranking | `Analysis.sql` | Which insurer is cheapest for my exact profile? |
-| Billing percentiles | `Advanced_Analysis.sql` | What's the full cost distribution, not just the average? |
-| Provider market share | `Advanced_Analysis.sql` | Which insurer dominates each condition? |
-| Outlier detection | `Advanced_Analysis.sql` | Which claims are abnormally expensive? |
-| Cost efficiency score | `Advanced_Analysis.sql` | Billing per day — true efficiency metric |
-| Readmission proxy | `Advanced_Analysis.sql` | Do some insurers have more repeat patients? |
-| Monthly trends | `Advanced_Analysis.sql` | Are costs seasonal? |
-| Statistical significance | `statistical_analysis.py` | Are cost differences real or random noise? |
-| Confidence intervals | `statistical_analysis.py` | How precise are the provider cost estimates? |
-| Data quality score | `data_profiler.py` | Is the dataset clean enough to trust? |
+| Billing by demographics | `sql/02_procedures.sql` | Which age groups and conditions face highest costs? |
+| Provider cost comparison | `sql/02_procedures.sql` | How do insurers compare on price? |
+| Cost per day of stay | `sql/02_procedures.sql` | Is a "cheap" insurer actually cheap, or just shorter stays? |
+| Optimal insurer ranking | `sql/03_analysis.sql` | Which insurer is cheapest for my exact profile? |
+| Billing percentiles | `sql/04_advanced.sql` | What's the full cost distribution, not just the average? |
+| Provider market share | `sql/04_advanced.sql` | Which insurer dominates each condition? |
+| Outlier detection | `sql/04_advanced.sql` | Which claims are abnormally expensive? |
+| Cost efficiency score | `sql/04_advanced.sql` | Billing per day — true efficiency metric |
+| Readmission proxy | `sql/04_advanced.sql` | Do some insurers have more repeat patients? |
+| Monthly trends | `sql/04_advanced.sql` | Are costs seasonal? |
+| Statistical significance | `src/insureyours/statistical_analysis.py` | Are cost differences real or random noise? |
+| Confidence intervals | `src/insureyours/statistical_analysis.py` | How precise are the provider cost estimates? |
+| Data quality score | `src/insureyours/data_profiler.py` | Is the dataset clean enough to trust? |
 
 ## REST API
 
@@ -146,32 +146,37 @@ After running the pipeline, the API serves at **http://localhost:8000**.
 
 ```
 InsureYours/
-├── Tables_Creation.sql           # MySQL schema (staging + normalized + output tables)
-├── etl_load.py                   # Python ETL with row-level validation
-├── StoredProcedure.sql           # Views and analytical stored procedures
-├── Analysis.sql                  # Insurance ranking (DENSE_RANK on AVG)
-├── Advanced_Analysis.sql         # Percentiles, outliers, trends, market share
-├── api.py                        # FastAPI REST API with Swagger docs + dashboard
-├── data_profiler.py              # Data quality & EDA report generator
-├── statistical_analysis.py       # Hypothesis tests, CIs, ANOVA, Cohen's d
-├── run_pipeline.sh               # One-script full pipeline runner
-├── Makefile                      # make pipeline / profile / stats / api / test
-├── docker-compose.yml            # One-command Docker setup (DB + ETL + analysis + API)
-├── Dockerfile                    # Python container for ETL + API
-├── pyproject.toml                # Project config (uv + ruff + pytest)
-├── uv.lock                       # Locked dependencies (deterministic installs)
-├── requirements.txt              # Fallback for pip users
-├── .env.example                  # Environment variable template
+├── src/insureyours/
+│   ├── __init__.py               # Package version
+│   ├── etl_load.py               # Python ETL with row-level validation
+│   ├── api.py                    # FastAPI REST API with Swagger docs + dashboard
+│   ├── data_profiler.py          # Data quality & EDA report generator
+│   └── statistical_analysis.py  # Hypothesis tests, CIs, ANOVA, Cohen's d
+├── sql/
+│   ├── 01_schema.sql             # MySQL schema (staging + normalized + output tables)
+│   ├── 02_procedures.sql         # Views and analytical stored procedures
+│   ├── 03_analysis.sql           # Insurance ranking (DENSE_RANK on AVG)
+│   └── 04_advanced.sql           # Percentiles, outliers, trends, market share
+├── docker/
+│   ├── Dockerfile                # Python container for ETL + API
+│   └── run_analysis.sh           # Runs SQL analytics inside Docker
 ├── dashboard/
 │   └── index.html                # Interactive web dashboard (Chart.js)
 ├── notebooks/
 │   └── exploratory_analysis.ipynb  # EDA: distributions, trends, heatmaps
 ├── tests/
-│   ├── test_etl.py               # ETL validation unit tests
-│   └── test_api.py               # API endpoint tests (mocked DB)
+│   ├── test_etl.py               # ETL validation unit tests (27 tests)
+│   └── test_api.py               # API endpoint tests, mocked DB (25 tests)
 ├── .github/
 │   └── workflows/ci.yml          # CI: lint + unit tests + MySQL integration test
 ├── ETL/                          # Legacy SSIS package (Windows, for reference)
+├── run_pipeline.sh               # One-script full pipeline runner
+├── Makefile                      # make pipeline / profile / stats / api / test
+├── docker-compose.yml            # One-command Docker setup (DB + ETL + analysis + API)
+├── pyproject.toml                # Project config (uv + ruff + pytest)
+├── uv.lock                       # Locked dependencies (deterministic installs)
+├── requirements.txt              # Fallback for pip users
+├── .env.example                  # Environment variable template
 ├── healthcare_dataset.csv        # Data file (download from Kaggle, gitignored)
 └── HealthCare_Final_Project.pbix # Power BI dashboard (gitignored)
 ```

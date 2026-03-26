@@ -87,7 +87,10 @@ app.add_middleware(
 )
 
 # Serve the interactive dashboard at /dashboard (optional — only if directory exists)
-_dashboard_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dashboard")
+# Resolve project root: src/insureyours/api.py → ../../ → project root → dashboard/
+_dashboard_dir = os.path.normpath(
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "dashboard")
+)
 if os.path.isdir(_dashboard_dir):
     app.mount("/dashboard", StaticFiles(directory=_dashboard_dir, html=True), name="dashboard")
 

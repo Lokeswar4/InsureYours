@@ -5,5 +5,5 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY etl_load.py api.py data_profiler.py statistical_analysis.py ./
+COPY src/insureyours/ src/insureyours/
 COPY dashboard/ dashboard/

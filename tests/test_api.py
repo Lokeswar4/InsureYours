@@ -7,11 +7,13 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from fastapi.testclient import TestClient
+sys.path.insert(
+    0,
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "src", "insureyours"),
+)
 
 import api
+from fastapi.testclient import TestClient
 
 # Client without lifespan (pool stays None unless patched per-test)
 client = TestClient(api.app, raise_server_exceptions=True)

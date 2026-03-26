@@ -9,7 +9,7 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./Tables_Creation.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+      - ./sql/01_schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 5s
@@ -17,7 +17,9 @@ services:
       retries: 10
 
   etl:
-    build: .
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
     container_name: insureyours-etl
     depends_on:
       mysql:
@@ -26,7 +28,7 @@ services:
       MYSQL_HOST: mysql
       MYSQL_USER: root
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:-insureyours}
-    entrypoint: ["python3", "etl_load.py", "--host", "mysql", "--user", "root", "--password", "${MYSQL_PASSWORD:-insureyours}"]
+    entrypoint: ["python3", "src/insureyours/etl_load.py", "--host", "mysql", "--user", "root", "--password", "${MYSQL_PASSWORD:-insureyours}"]
     volumes:
       - ./healthcare_dataset.csv:/app/healthcare_dataset.csv:ro
 
@@ -39,14 +41,16 @@ services:
     environment:
       MYSQL_PWD: ${MYSQL_PASSWORD:-insureyours}
     volumes:
-      - ./StoredProcedure.sql:/scripts/StoredProcedure.sql:ro
-      - ./Analysis.sql:/scripts/Analysis.sql:ro
-      - ./Advanced_Analysis.sql:/scripts/Advanced_Analysis.sql:ro
+      - ./sql/02_procedures.sql:/scripts/StoredProcedure.sql:ro
+      - ./sql/03_analysis.sql:/scripts/Analysis.sql:ro
+      - ./sql/04_advanced.sql:/scripts/Advanced_Analysis.sql:ro
       - ./docker/run_analysis.sh:/scripts/run_analysis.sh:ro
     entrypoint: ["bash", "/scripts/run_analysis.sh"]
 
   api:
-    build: .
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
     container_name: insureyours-api
     depends_on:
       analysis:
@@ -55,7 +59,7 @@ services:
       MYSQL_HOST: mysql
       MYSQL_USER: root
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:-insureyours}
-    entrypoint: ["python3", "api.py", "--host", "0.0.0.0", "--db-host", "mysql", "--db-password", "${MYSQL_PASSWORD:-insureyours}"]
+    entrypoint: ["python3", "src/insureyours/api.py", "--host", "0.0.0.0", "--db-host", "mysql", "--db-password", "${MYSQL_PASSWORD:-insureyours}"]
     ports:
       - "8000:8000"
     restart: unless-stopped

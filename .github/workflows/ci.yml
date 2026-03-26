@@ -91,16 +91,16 @@ jobs:
           "
 
       - name: Create schema
-        run: mysql -h 127.0.0.1 -u root -ptestpass < Tables_Creation.sql
+        run: mysql -h 127.0.0.1 -u root -ptestpass < sql/01_schema.sql
 
       - name: Run ETL
-        run: uv run python etl_load.py --host 127.0.0.1 --user root --password testpass
+        run: uv run python src/insureyours/etl_load.py --host 127.0.0.1 --user root --password testpass
 
       - name: Create procedures and run analysis
         run: |
-          mysql -h 127.0.0.1 -u root -ptestpass Healthcare_Group_Project < StoredProcedure.sql
-          mysql -h 127.0.0.1 -u root -ptestpass Healthcare_Group_Project < Analysis.sql
-          mysql -h 127.0.0.1 -u root -ptestpass Healthcare_Group_Project < Advanced_Analysis.sql
+          mysql -h 127.0.0.1 -u root -ptestpass Healthcare_Group_Project < sql/02_procedures.sql
+          mysql -h 127.0.0.1 -u root -ptestpass Healthcare_Group_Project < sql/03_analysis.sql
+          mysql -h 127.0.0.1 -u root -ptestpass Healthcare_Group_Project < sql/04_advanced.sql
 
       - name: Verify results
         run: |

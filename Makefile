@@ -1,4 +1,4 @@
-.PHONY: help setup etl analyze advanced profile stats api test lint format docker docker-down docker-reset pipeline clean
+.PHONY: help setup etl analyze profile stats api test lint format docker docker-down docker-reset pipeline clean
 
 # Default MySQL connection (override with: make etl MYSQL_HOST=10.0.0.5)
 MYSQL_HOST     ?= localhost
@@ -14,36 +14,36 @@ help: ## Show this help
 # ---------- Pipeline (requires MySQL + Python) ----------
 
 setup: ## Create database and tables
-	mysql -h $(MYSQL_HOST) -P $(MYSQL_PORT) -u $(MYSQL_USER) -p$(MYSQL_PASSWORD) < Tables_Creation.sql
+	mysql -h $(MYSQL_HOST) -P $(MYSQL_PORT) -u $(MYSQL_USER) -p$(MYSQL_PASSWORD) < sql/01_schema.sql
 
 etl: ## Run ETL pipeline (load CSV into MySQL)
-	uv run python etl_load.py \
+	uv run python src/insureyours/etl_load.py \
 		--host $(MYSQL_HOST) --port $(MYSQL_PORT) \
 		--user $(MYSQL_USER) --password $(MYSQL_PASSWORD)
 
 analyze: ## Create procedures and run core + advanced analysis
-	mysql -h $(MYSQL_HOST) -P $(MYSQL_PORT) -u $(MYSQL_USER) -p$(MYSQL_PASSWORD) $(MYSQL_DB) < StoredProcedure.sql
-	mysql -h $(MYSQL_HOST) -P $(MYSQL_PORT) -u $(MYSQL_USER) -p$(MYSQL_PASSWORD) $(MYSQL_DB) < Analysis.sql
-	mysql -h $(MYSQL_HOST) -P $(MYSQL_PORT) -u $(MYSQL_USER) -p$(MYSQL_PASSWORD) $(MYSQL_DB) < Advanced_Analysis.sql
+	mysql -h $(MYSQL_HOST) -P $(MYSQL_PORT) -u $(MYSQL_USER) -p$(MYSQL_PASSWORD) $(MYSQL_DB) < sql/02_procedures.sql
+	mysql -h $(MYSQL_HOST) -P $(MYSQL_PORT) -u $(MYSQL_USER) -p$(MYSQL_PASSWORD) $(MYSQL_DB) < sql/03_analysis.sql
+	mysql -h $(MYSQL_HOST) -P $(MYSQL_PORT) -u $(MYSQL_USER) -p$(MYSQL_PASSWORD) $(MYSQL_DB) < sql/04_advanced.sql
 
 pipeline: setup etl analyze ## Run full pipeline end-to-end
 
 # ---------- Analysis Tools (Data Analyst) ----------
 
 profile: ## Generate data quality & profiling report
-	uv run python data_profiler.py \
+	uv run python src/insureyours/data_profiler.py \
 		--host $(MYSQL_HOST) --port $(MYSQL_PORT) \
 		--user $(MYSQL_USER) --password $(MYSQL_PASSWORD)
 
 stats: ## Run statistical analysis (t-tests, ANOVA, CIs)
-	uv run python statistical_analysis.py \
+	uv run python src/insureyours/statistical_analysis.py \
 		--host $(MYSQL_HOST) --port $(MYSQL_PORT) \
 		--user $(MYSQL_USER) --password $(MYSQL_PASSWORD)
 
 # ---------- API (Data Engineering) ----------
 
 api: ## Start the REST API server on port 8000
-	uv run python api.py \
+	uv run python src/insureyours/api.py \
 		--db-host $(MYSQL_HOST) --db-port $(MYSQL_PORT) \
 		--db-user $(MYSQL_USER) --db-password $(MYSQL_PASSWORD)
 

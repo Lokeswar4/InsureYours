@@ -17,19 +17,19 @@ echo "============================================"
 
 echo ""
 echo "[1/5] Creating database and tables..."
-mysql -h "$HOST" -u "$USER" ${PASS:+-p"$PASS"} < "$DIR/Tables_Creation.sql"
+mysql -h "$HOST" -u "$USER" ${PASS:+-p"$PASS"} < "$DIR/sql/01_schema.sql"
 
 echo "[2/5] Running ETL (CSV → MySQL)..."
-python3 "$DIR/etl_load.py" --host "$HOST" --user "$USER" --password "${PASS:-}"
+python3 "$DIR/src/insureyours/etl_load.py" --host "$HOST" --user "$USER" --password "${PASS:-}"
 
 echo "[3/5] Creating views and stored procedures..."
-mysql -h "$HOST" -u "$USER" ${PASS:+-p"$PASS"} "$DB" < "$DIR/StoredProcedure.sql"
+mysql -h "$HOST" -u "$USER" ${PASS:+-p"$PASS"} "$DB" < "$DIR/sql/02_procedures.sql"
 
 echo "[4/5] Running insurance ranking analysis..."
-mysql -h "$HOST" -u "$USER" ${PASS:+-p"$PASS"} "$DB" < "$DIR/Analysis.sql"
+mysql -h "$HOST" -u "$USER" ${PASS:+-p"$PASS"} "$DB" < "$DIR/sql/03_analysis.sql"
 
 echo "[5/5] Running advanced analytics..."
-mysql -h "$HOST" -u "$USER" ${PASS:+-p"$PASS"} "$DB" < "$DIR/Advanced_Analysis.sql"
+mysql -h "$HOST" -u "$USER" ${PASS:+-p"$PASS"} "$DB" < "$DIR/sql/04_advanced.sql"
 
 echo ""
 echo "============================================"

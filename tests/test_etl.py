@@ -5,8 +5,11 @@ import sys
 import unittest
 from datetime import date
 
-# Add project root to path so we can import etl_load
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# Add src/insureyours to path so module imports work without package installation
+sys.path.insert(
+    0,
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "src", "insureyours"),
+)
 
 from api import _age_to_group
 from etl_load import EXPECTED_COLUMNS, validate_row
